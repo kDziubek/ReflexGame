@@ -102,6 +102,8 @@ public class ReflexView extends View {
         levelTextView = relativeLayout.findViewById(R.id.levelTextview);
 
         spotHandler = new Handler();
+        
+        addNewSpot();
 
 
     }
@@ -114,14 +116,18 @@ public class ReflexView extends View {
 
     public void addNewSpot(){
 
-        int x = random.nextInt(viewWidth - SPOT_DAIMETER);
-        int y = random.nextInt(viewHigh - SPOT_DAIMETER);
-        int x2 = random.nextInt(viewWidth - SPOT_DAIMETER);
-        int y2 = random.nextInt(viewHigh - SPOT_DAIMETER);
+
 
         //Create the actual spot / circle
         final ImageView spot = (ImageView) layoutInflater.inflate(R.layout.untouched,null);
+
+        int x = random.nextInt(300 - SPOT_DAIMETER);
+        int y = random.nextInt(300  - SPOT_DAIMETER);
+        int x2 = random.nextInt(300 - SPOT_DAIMETER);
+        int y2 = random.nextInt(300 - SPOT_DAIMETER);
         spots.add(spot);
+
+
         spot.setLayoutParams(new RelativeLayout.LayoutParams(SPOT_DAIMETER, SPOT_DAIMETER));
         // if random number between 0 nad 2 is equal 0 than we gonna make a green spot, if not true, red spot.
         spot.setImageResource(random.nextInt(2)== 0? R.drawable.green_spot : R.drawable.red_spot);
