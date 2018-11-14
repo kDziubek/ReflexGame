@@ -8,6 +8,7 @@ import android.media.SoundPool;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -143,6 +144,25 @@ public class ReflexView extends View {
         spot.setX(x);// set spot's starting x location
         spot.setY(y); // set spot's starting y location
 
+        spot.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+               touchedSpot(spot);
+            }
+        });
+
         // adding circle to the screen
         relativeLayout.addView(spot);    }
+
+    private void touchedSpot(ImageView spot) {
+        //after touch remove spot view
+        relativeLayout.removeView(spot);
+        // after touch remove spot from spots queue
+        spots.remove(spot);
+
+        ++spotsTouched; //increment the number of spots touched
+        score += 10 * level;
+
+        currentScoreTexetView.setText("Score:" + score);
 }
