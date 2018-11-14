@@ -7,8 +7,10 @@ import android.content.res.Resources;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -116,25 +118,31 @@ public class ReflexView extends View {
 
     public void addNewSpot(){
 
-
-
         //Create the actual spot / circle
         final ImageView spot = (ImageView) layoutInflater.inflate(R.layout.untouched,null);
 
-        int x = random.nextInt(300 - SPOT_DAIMETER);
-        int y = random.nextInt(300  - SPOT_DAIMETER);
-        int x2 = random.nextInt(300 - SPOT_DAIMETER);
-        int y2 = random.nextInt(300 - SPOT_DAIMETER);
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) spot.getContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height  = metrics.heightPixels;
+
+        // choose two random coordinates for the starting and ending point
+        int x = random.nextInt(width - SPOT_DAIMETER);
+        int y = random.nextInt(height  - SPOT_DAIMETER);
+        int x2 = random.nextInt(width - SPOT_DAIMETER);
+        int y2 = random.nextInt(height - SPOT_DAIMETER);
+
+
         spots.add(spot);
+        // Diameter, diameter
+        spot.setLayoutParams(new RelativeLayout.LayoutParams(SPOT_DAIMETER,SPOT_DAIMETER));
 
-
-        spot.setLayoutParams(new RelativeLayout.LayoutParams(SPOT_DAIMETER, SPOT_DAIMETER));
         // if random number between 0 nad 2 is equal 0 than we gonna make a green spot, if not true, red spot.
         spot.setImageResource(random.nextInt(2)== 0? R.drawable.green_spot : R.drawable.red_spot);
-        spot.setX(x);
-        spot.setX(y);
+        spot.setX(x);// set spot's starting x location
+        spot.setY(y); // set spot's starting y location
 
         // adding circle to the screen
-        relativeLayout.addView(spot);
-    }
+        relativeLayout.addView(spot);    }
 }
