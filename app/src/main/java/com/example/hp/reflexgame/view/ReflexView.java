@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -77,7 +80,8 @@ public class ReflexView extends View {
     public static final int SOUND_QUALITY = 1000;
     public static final int MAX_STREAMS = 4;
 
-    private SoundPool soundPool;
+    private SoundPool.Builder soundPool;
+    private SoundPool soundPool1;
     private int volume;
     private Map<Integer, Integer> soundMap;
 
@@ -104,9 +108,9 @@ public class ReflexView extends View {
         currentScoreTexetView = relativeLayout.findViewById(R.id.scoreTextView);
         levelTextView = relativeLayout.findViewById(R.id.levelTextview);
 
-        spotHandler = new Handler();
+       // spotHandler = new Handler();
         
-        addNewSpot();
+        //addNewSpot();
 
 
     }
@@ -116,6 +120,30 @@ public class ReflexView extends View {
         viewWidth = w;
         viewHigh = h;
     }
+
+    private void initializeSoundEffects(Context context){
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build();
+            soundPool = new SoundPool.Builder();
+            soundPool.setAudioAttributes(audioAttributes).setMaxStreams(MAX_STREAMS).build();
+    }
+
+    private void displayScores(){
+        //highScoreTextView.setText(R.string.high_score);
+        highScoreTextView.setText(resources.getString(R.string.high_score) + "" + highScore);
+        currentScoreTexetView.setText(resources.getString(R.string.score) + "" + score);
+        levelTextView.setText(resources.getString(R.string.level) + "" + level);
+    }
+
+    private Runnable addSpotRunnable = new Runnable() {
+        @Override
+        public void run() {
+            addNewSpot();
+        }
+    };
 
     public void addNewSpot(){
 
@@ -160,9 +188,11 @@ public class ReflexView extends View {
         relativeLayout.removeView(spot);
         // after touch remove spot from spots queue
         spots.remove(spot);
+        //level = 1;
 
         ++spotsTouched; //increment the number of spots touched
         score += 10 * level;
 
-        currentScoreTexetView.setText("Score:" + score);
+        //currentScoreTexetView.setText("Score:" + score);
+    }
 }
